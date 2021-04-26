@@ -5,12 +5,12 @@ Spielmechanik Teil A High Mobility
 	Dash
 	Grappling Hook
 	Jump Booster
-	Klettern
-	Gewehr als Waffe
-	Einstellbare PlayerMovement Komponente
-Animierte Zombie Bots
-	Schauen in Richtung Spieler und strecken ihre Hände nach dem Spieler wenn Sie nah an den Spieler kommen.
-	Greifen den Spieler in der Nähe oder wenn sie selbst angegriffen werden an.
+	Climbing
+	Rifle as Weapon
+	Adjustable PlayerMovement Component
+Animated Zombie Bots
+	Reaching for the player if close enough.
+	Seeking for the player if too close or become shot.
 
 
 Assets:
