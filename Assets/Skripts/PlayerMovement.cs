@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 12f;
     public float gravity = -29.43f;
 
-
+    public Transform handPosition;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
@@ -60,7 +60,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isOnClimbableSurface;
     private bool isClimbing;
 
-
+    // Bomb
+    [Header("Bomb throwing Settings")]
+    public GameObject bombPrefab;
+    public float throwingPower;
+    public float throwingCooldown = 10f;
+    private float throwingTimer;
 
     private bool _isGrounded;
     Vector3 velocity;
@@ -74,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         Material lineMaterial = new Material(Shader.Find("Standard"));
         lineMaterial.color = new Color(0, 0, 0, 1);
         lineRenderer.material = lineMaterial;
+        throwingTimer = throwingCooldown;
     }
 
 
@@ -87,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         _isOnJumpBooster = Physics.CheckSphere(groundCheck.position, groundDistance, jumpBoosterMask);
         isOnClimbableSurface = Physics.CheckCapsule(transform.position - Vector3.up, transform.position + Vector3.up, 0.6f, climbableSurface);
 
+        // Jump Booster
         if (_isOnJumpBooster)
         {
             velocity.y += Mathf.Sqrt(jumpHeight * jumpBoosterVelocity * -2f * gravity);
@@ -105,8 +112,6 @@ public class PlayerMovement : MonoBehaviour
 
         RaycastHit hit;
         // Climbing
-
-
         if (isOnClimbableSurface && Input.GetKey(KeyCode.Mouse1))
         {
             int climbDir = cam.transform.localRotation.x <= 0 ? 1 : -1;
@@ -118,6 +123,16 @@ public class PlayerMovement : MonoBehaviour
         {
             isClimbing = false;
         }
+
+        // Bomb throwing
+        throwingTimer += Time.deltaTime;
+        if (!isClimbing && Input.GetKeyDown(KeyCode.Mouse1) && throwingTimer >= throwingCooldown)
+        {
+            GameObject bomb = Instantiate(bombPrefab, handPosition.position, Quaternion.identity);
+            bomb.GetComponent<Rigidbody>().AddForce(cam.transform.forward * throwingPower, ForceMode.Impulse);
+            throwingTimer = 0;
+        }
+
 
 
         // Grappling Hook
@@ -134,6 +149,7 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetMouseButtonDown(2) && _isGrappling)
         {
             _isGrappling = false;
+            velocity.y = 0;
         }
         if (_isGrappling && _remainingGrapplingTime > 0 && Vector3.Distance(transform.position, grapplingTargetPosition) > grapplingBreakDistance)
         {
@@ -141,12 +157,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 _isGrappling = false;
                 _canDoubleJump = true;
-                _isGrounded = true;
+                velocity.y = 0;
             }
             _remainingGrapplingTime -= Time.deltaTime;
             controller.Move((grapplingTargetPosition - transform.position).normalized * Mathf.Lerp(_currentGrapplingSpeed, grapplingSpeed, 1f) * Time.deltaTime);
             lineRenderer.SetPositions(new Vector3[] { transform.position, grapplingTargetPosition });
-            velocity.y -= gravity * Time.deltaTime; // cancel out gravity
+            //velocity.y -= gravity * Time.deltaTime; // cancel out gravity
         }
         else
         {
@@ -191,10 +207,10 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetButtonDown("Jump") && !_isGrounded && _canDoubleJump)
         {
             _canDoubleJump = false;
-            velocity.y = Mathf.Sqrt(jumpHeight * 1.5f * -2f * gravity);
+            velocity.y += Mathf.Sqrt(jumpHeight * 1.5f * -2f * gravity);
         }
 
-        if (!isClimbing)
+        if (!isClimbing && !_isGrappling)
         {
             controller.Move(move * speed * Time.deltaTime);
             velocity.y += gravity * Time.deltaTime;
@@ -203,6 +219,10 @@ public class PlayerMovement : MonoBehaviour
 
 
 
+
+    }
+    void CancelGrappling()
+    {
 
     }
     void applyGravity()

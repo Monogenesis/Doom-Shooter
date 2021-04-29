@@ -10,6 +10,10 @@ public class ResetScene : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetSceneAt(0).name);
         }
+        else if (other.tag == "Enemy")
+        {
+            Destroy(other.gameObject);
+        }
 
     }
 }

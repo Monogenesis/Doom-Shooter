@@ -9,6 +9,8 @@ public class EnemyIKControl : MonoBehaviour
     public Transform leftHand;
     public Transform rightHand;
     public Transform lookObj;
+    float rightHandWeight;
+    float leftHandWeight;
 
     void Start()
     {
@@ -29,15 +31,19 @@ public class EnemyIKControl : MonoBehaviour
                 float distanceToPlayer = Vector3.Distance(transform.position, lookObj.position);
                 if (distanceToPlayer < 8f && animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded"))
                 {
-                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+                    rightHandWeight = Mathf.Lerp(rightHandWeight, 1, Time.deltaTime);
+                    leftHandWeight = Mathf.Lerp(leftHandWeight, 1, Time.deltaTime);
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightHandWeight);
                     animator.SetIKPosition(AvatarIKGoal.RightHand, rightHand.position);
-                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftHandWeight);
                     animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand.position);
                 }
                 else
                 {
-                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
-                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
+                    rightHandWeight = Mathf.Lerp(rightHandWeight, 0, Time.deltaTime);
+                    leftHandWeight = Mathf.Lerp(leftHandWeight, 0, Time.deltaTime);
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightHandWeight);
+                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftHandWeight);
 
                 }
             }
