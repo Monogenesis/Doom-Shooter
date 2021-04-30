@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 5519011778200108243}
   - component: {fileID: 1486518193737590841}
   - component: {fileID: -8720297888039401946}
-  - component: {fileID: -1059102575920793136}
+  - component: {fileID: 7724682875953790595}
+  - component: {fileID: 4802414378170221833}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -113,7 +114,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-1059102575920793136
+--- !u!114 &7724682875953790595
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,8 +123,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 4701349873119518748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cd16afb5511fa24286a969b57ad27b0, type: 3}
+  m_Script: {fileID: 11500000, guid: 433e9c8d0293ac4429eaf19bff2b58cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionRadius: 5
-  explosionForce: 100
+  explosionPrefab: {fileID: 400010, guid: 031d08f52af1daa4f929b85221519426, type: 3}
+  detonationImpactVelocity: 10
+  sizeMultiplier: 1
+  reset: 1
+  resetTimeDelay: 10
+--- !u!114 &4802414378170221833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4701349873119518748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643c971818f68d3439e84b5d8bdafe07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

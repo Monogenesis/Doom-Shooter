@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
+    public Text ActionInfoText;
 
     public float speed = 12f;
     public float gravity = -29.43f;
@@ -112,27 +113,49 @@ public class PlayerMovement : MonoBehaviour
 
         RaycastHit hit;
         // Climbing
-        if (isOnClimbableSurface && Input.GetKey(KeyCode.Mouse1))
+        if (isOnClimbableSurface && !Input.GetButtonDown("Jump"))
         {
-            int climbDir = cam.transform.localRotation.x <= 0 ? 1 : -1;
-            transform.position += Vector3.up * Input.GetAxis("Vertical") * climbSpeed * climbDir * Time.deltaTime;
-            _canDoubleJump = true;
-            isClimbing = true;
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                isClimbing = true;
+
+            }
         }
         else
         {
             isClimbing = false;
         }
-
+        if (isClimbing && Input.GetKey(KeyCode.Mouse1))
+        {
+            _canDoubleJump = true;
+            int climbDir = cam.transform.localRotation.x <= 0 ? 1 : -1;
+            Vector3 nextStep = Vector3.up * Input.GetAxis("Vertical") * climbSpeed * climbDir * Time.deltaTime;
+            if (!_isGrounded || nextStep.y > 0)
+            {
+                transform.position += nextStep;
+            }
+        }
+        if (isClimbing && !Input.GetKey(KeyCode.Mouse1))
+        {
+            isClimbing = false;
+        }
+        if (isOnClimbableSurface && !isClimbing)
+        {
+            ActionInfoText.enabled = true;
+        }
+        else
+        {
+            ActionInfoText.enabled = false;
+        }
         // Bomb throwing
-        throwingTimer += Time.deltaTime;
+        /*throwingTimer += Time.deltaTime;
         if (!isClimbing && Input.GetKeyDown(KeyCode.Mouse1) && throwingTimer >= throwingCooldown)
         {
             GameObject bomb = Instantiate(bombPrefab, handPosition.position, Quaternion.identity);
             bomb.GetComponent<Rigidbody>().AddForce(cam.transform.forward * throwingPower, ForceMode.Impulse);
             throwingTimer = 0;
         }
-
+        */
 
 
         // Grappling Hook

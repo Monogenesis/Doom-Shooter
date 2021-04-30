@@ -1,4 +1,4 @@
-Demo: https://youtu.be/uuJReT39g9o
+Demo: https://youtu.be/09n2tvDohk8
 Projekt: https://github.com/Monogenesis/DoomClone.git
 
 Spielmechanik Teil A High Mobility
@@ -12,7 +12,10 @@ Spielmechanik Teil A High Mobility
 Animierte Zombie Bots
 	Schauen in Richtung Spieler und strecken ihre Hände nach dem Spieler wenn Sie nah an den Spieler kommen.
 	Greifen den Spieler in der Nähe oder wenn sie selbst angegriffen werden an.
-
+UI basics für einen Shooter
+	HP Leiste
+	Munitionszähler
+	Gegnerzähler
 
 Assets:
 	Unity Standard Assets
